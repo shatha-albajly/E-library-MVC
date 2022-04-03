@@ -1,6 +1,6 @@
 <?php
 
-namespace db;
+namespace app;
 
 use \PDO;
 
@@ -10,7 +10,7 @@ class DB
     final public const HOSTNAME = 'localhost';
     final public const USERNAME = 'root';
     final public const PASSWORD = '';
-    final public const DATABASE = 'shop';
+    final public const DATABASE = 'elib';
 
     public $conn;
 
@@ -23,11 +23,15 @@ class DB
     private $values = [];
     private $order = [];
     private $group = [];
+    private $like = [];
+
     private $innerJoin = [];
     private $leftjoin = [];
     private $rightjoin = [];
     private $outerjoin = [];
     private $limit;
+    public  $as = "ddd";
+    public static $sendOutside;
 
     public $result;
 
@@ -40,8 +44,24 @@ class DB
         }
     }
 
+
+
+    public static function sendOutside()
+    {
+
+        if (self::$sendOutside == null) {
+
+            self::$sendOutside = new DB();
+        }
+
+        return self::$sendOutside;
+    }
+
+
+
     public function table(string $table, string $alias = null)
     {
+
         $this->table = $alias === null ? $table : "${table} AS ${alias}";
         return $this;
     }
@@ -83,6 +103,12 @@ class DB
         $this->order = $order;
         return $this;
     }
+
+    public function like(string ...$like)
+    {
+        $this->like = $like;
+        return $this;
+    }
     public function Innerjoin(string ...$innerjoin)
     {
         $this->innerJoin = $innerjoin;
@@ -116,6 +142,7 @@ class DB
         $orwhere = $this->orconditions === [] ? '' : ' WHERE ' . implode(' OR ', $this->orconditions);
         $order = $this->order === [] ? '' : ' ORDER BY ' . implode(' , ', $this->order);
         $group = $this->group === [] ? '' : ' GROUP BY ' . implode(' , ', $this->group);
+        $like = $this->like === [] ? '' : ' like "%' . implode(' , ', $this->like) . '%"';
 
         $innerjoin = $this->innerJoin === [] ? '' : ' INNER JOIN ' . implode(' INNER JOIN ', $this->innerJoin) . $on;
 
@@ -126,15 +153,18 @@ class DB
         $column  = $this->column === [] ? '*' : implode(',', $this->column);
 
         $outerjoin = $this->outerjoin === [] ? '' : " UNION SELECT $column FROM " . $this->table  . $rightjoin;
-        $sql = "SELECT " . $column . ' FROM ' . $this->table . $leftjoin . $innerjoin . $outerjoin  . $limit . $where . $orwhere . $group . $order;
+        $sql = "SELECT " . $column . ' FROM ' . $this->table . $leftjoin . $innerjoin . $outerjoin  . $limit . $where . $orwhere . $like . $group . $order;
 
+        // if ($delete) {
+        //     $sql = "DELETE FROM " . $column . ' FROM ' . $where . $orwhere . $this->table;
+        // }
 
 
         echo $sql;
 
         $stm = $this->conn->prepare($sql);
         if ($stm->execute()) {
-            $this->result = $stm->fetchAll();
+            $this->result = $stm->fetchAll(PDO::FETCH_ASSOC);
         }
     }
 
@@ -143,8 +173,10 @@ class DB
         $column = $this->column === [] ? '' : " (" . implode(',', $this->column) . ") ";
         $values = "(' " . implode("','", $this->values) . " ')";
 
-        $sql = "INSERT INTO " . $this->table . 'COUNT(' . $column . ')' . " VALUES " . $values;
 
+        // $sql = "INSERT INTO " . $this->table . ' COUNT(' . $column . ')' . " VALUES " . $values;
+        $sql = "INSERT INTO " . $this->table . " VALUES " . $values;
+        echo $sql;
         $this->conn->prepare($sql)->execute();
     }
 
@@ -153,102 +185,25 @@ class DB
         $where = $this->conditions === [] ? '' : ' WHERE ' . implode(' AND ', $this->conditions);
 
         $sql = "DELETE FROM " . $this->table . $where;
+        echo $sql;
+
         $this->conn->prepare($sql)->execute();
     }
 
     public function update()
     {
+        echo "update";
+
+        // UPDATE `books` SET `is_active` = '0' WHERE `books`.`id` = 6;
+
         $where = " WHERE " . implode(' AND ', $this->conditions);
 
         $values = implode(', ', $this->values);
 
         $sql = "UPDATE " . $this->table . " SET " . $values . $where;
+        echo $sql;
+
 
         $this->conn->prepare($sql)->execute();
     }
-}
-$product = new DB();
-$product->table('products')->column()->order('price')->select();
-echo "<hr>";
-echo "<h2>Order By</h2>";
-foreach ($product->result as $p) {
-
-    echo $p['name'] . "<br>";
-    echo $p['price'] . "<br>";
-    echo $p['details'] . "<br>";
-}
-$product1 = new DB();
-$product1->table('products')->column()->group('price')->select();
-echo "<hr>";
-echo "<h2>Group By</h2>";
-foreach ($product1->result as $p) {
-
-    echo $p['name'] . "<br>";
-    echo $p['price'] . "<br>";
-    echo $p['details'] . "<br>";
-}
-echo "<hr>";
-echo "<h2>Count</h2>";
-$product2 = new DB();
-$product2->table('products')->column()->select();
-foreach ($product2->result as $p) {
-    echo $p['name'] . "<br>";
-    echo $p['price'] . "<br>";
-    echo $p['details'] . "<br>";
-}
-
-echo "<hr>";
-echo "<h2>Inner Join</h2>";
-$product3 = new DB();
-$product3->table('products')->column()->Innerjoin('books')->on("books.id=products.id")->select();
-foreach ($product3->result as $p) {
-    echo $p['name'] . "<br>";
-    echo $p['price'] . "<br>";
-    echo $p['details'] . "<br>";
-}
-echo "<hr>";
-echo "<h2>Left Join</h2>";
-$product4 = new DB();
-$product4->table('products')->column()->leftjoin('books')->on("books.id=products.id")->select();
-foreach ($product4->result as $p) {
-    echo $p['name'] . "<br>";
-    echo $p['price'] . "<br>";
-    echo $p['details'] . "<br>";
-}
-echo "<hr>";
-echo "<h2>Outer Join</h2>";
-$product5 = new DB();
-
-$product5->table('products')->column()->Outerjoin("*")->leftjoin('books')->on("books.id=products.id")->rightjoin("books")->on("books.id=products.id")->select();
-foreach ($product5->result as $p) {
-    echo $p['name'] . "<br>";
-    echo $p['price'] . "<br>";
-    echo $p['details'] . "<br>";
-}
-echo "<hr>";
-echo "<h2>Limit</h2>";
-$product6 = new DB();
-$product6->table('products')->column()->limit(2)->select();
-foreach ($product6->result as $p) {
-    echo $p['name'] . "<br>";
-    echo $p['price'] . "<br>";
-    echo $p['details'] . "<br>";
-}
-echo "<hr>";
-echo "<h2>Where</h2>";
-$product7 = new DB();
-$product7->table('products', 'p')->column()->where('name="apple"', 'id="1"')->select();
-foreach ($product7->result as $p) {
-    echo $p['name'] . "<br>";
-    echo $p['price'] . "<br>";
-    echo $p['details'] . "<br>";
-}
-echo "<hr>";
-echo "<h2>Or Where</h2>";
-$product8 = new DB();
-$product8->table('products', 'p')->column()->orwhere('name="apple"', 'id="6"')->select();
-foreach ($product8->result as $p) {
-    echo $p['name'] . "<br>";
-    echo $p['price'] . "<br>";
-    echo $p['details'] . "<br>";
 }

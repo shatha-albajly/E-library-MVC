@@ -24,20 +24,21 @@
 
 
     </div>
+
     <div class="book container">
         <div class="book-pictures">
             <div class="pictures-box">
                 <div class="picture-container">
-                    <img src="../images/book1front.jpg" alt="" />
+                    <img src="../images/<?= $bookInfo['image']; ?>" alt="" />
                 </div>
                 <div class="pictures-nav">
                     <div class="small-pictures">
                         <div class="img-cart">
-                            <img src="../images/book1front.jpg" alt="" />
+                            <img src="../images/<?= $bookInfo['image']; ?>" alt="" />
                         </div>
-                        <div class="img-cart">
+                        <!-- <div class="img-cart">
                             <img src="../images/book2back.jpg" alt="" />
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -47,13 +48,13 @@
                 <div class="product-name">
                     <h2>
                         <a href="book">
-                            <p>لانك الله رحلة الى السماء السابعة‎</p>
+                            <p><?= $bookInfo['title']; ?></p>
                         </a>
                     </h2>
                 </div>
                 <div class="price-box">
                     <div class="price">
-                        <p>17.54</p>
+                        <p><?= $bookInfo['price']; ?></p>
 
                         <span class="price_currency"> رس </span>
                     </div>
@@ -85,7 +86,7 @@
                         </div>
                         <div class="price-box">
                             <div class="price">
-                                <p>17.54</p>
+                                <p><?= $bookInfo['price']; ?></p>
 
                                 <span class="price_currency"> رس </span>
                             </div>
@@ -100,7 +101,7 @@
                         </div>
                         <div class="price-box">
                             <div class="price">
-                                <p>17.54</p>
+                                <p><?= $bookInfo['price']; ?></p>
 
                                 <span class="price_currency"> رس </span>
                             </div>
@@ -181,7 +182,8 @@
 <!-- main end -->
 <section class="container book-details-section">
     <h2>المواصفات</h2>
-    <table class="table">
+    <p><?= $bookInfo['description']; ?></p>
+    <!-- <table class="table">
         <tbody class="table-body">
             <tr class="table-row">
                 <th class="table-item">
@@ -249,5 +251,5 @@
                 </td>
             </tr>
         </tbody>
-    </table>
+    </table> -->
 </section>

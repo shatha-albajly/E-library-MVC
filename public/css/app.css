@@ -1,0 +1,12 @@
+.dashboard{
+    width: 90%;
+    margin:   auto;
+    padding: 2rem;
+}
+
+.product-img {
+    width: 50px;
+}
+.product-img-view {
+    width: 120px;
+}

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 
 <head>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>cart page</title>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
         integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
         crossorigin="anonymous" />
@@ -16,7 +17,9 @@
     <link rel="stylesheet" href="../css/book.css" />
 
     <link rel="stylesheet" href="../css/cart.css" />
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link href="../css/app.css" rel="stylesheet" />
 
 
 
@@ -89,12 +92,17 @@
                 <img src="../images/svgs/logo.svg" alt="" style="width: 180px; height: 50px" />
             </a>
             <div class="search-section">
-                <div class="search-bar">
-                    <input id="search" type="search" placeholder="البحث" type="text" />
-                    <div class="search-icon">
-                        <img src="../images/svgs/search.svg" alt="" style="width: 20px; height: 20px" />
+
+                <form action="" method="get">
+                    <div class="search-bar">
+                        <input id="search" name="search" placeholder="البحث" type="text" />
+                        <div class="search-icon">
+                            <img src="../images/svgs/search.svg" alt="" style="width: 20px; height: 20px" />
+
+                        </div>
                     </div>
-                </div>
+                </form>
+
 
                 <a class="basket" href="cart">
                     <img src="../images/svgs/red-basket.svg" style="width: 35px; height: 35px" alt="red basket" />

@@ -2,16 +2,28 @@
 
 namespace app;
 
+use app\DB;
+
 class Router
 {
     private static array $getRoutes = [];
     private static array $postRoutes = [];
+    public static DB $db;
+
+
+
+    public static function connectToDB()
+    {
+        self::$db = DB::sendOutside();
+    }
+
 
     // get router
     public static function get($url, $fn)
     {
         self::$getRoutes[$url] = $fn;
     }
+
 
     // post router
     public static function post($url, $fn)
@@ -22,6 +34,7 @@ class Router
     // resolve router
     public static function resolve()
     {
+
         $method = $_SERVER['REQUEST_METHOD'];
         $url = $_SERVER['PATH_INFO'] ?? '/';
         if ($method === 'GET') {
