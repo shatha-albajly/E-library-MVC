@@ -100,7 +100,7 @@
 <!-- ads picture end -->
 
 <section class="container all-contents-product-page">
-    <div class="all-items product-page">
+    <!-- <div class="all-items product-page">
         <div class="open-all">
             <p>العروض الحالية</p>
             <a href="category">عرض الكل</a>
@@ -341,8 +341,9 @@
             </div>
             <img src="images/svgs/leftArrow.svg" style="width: 20px; height: 20px" alt="" />
         </div>
-    </div>
+    </div> -->
     <?php
+    print_r($books);
     ?>
     <?php foreach ($books as $category => $book) :
     ?>

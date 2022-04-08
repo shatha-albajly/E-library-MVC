@@ -182,6 +182,7 @@ class DB
 
     public function delete()
     {
+
         $where = $this->conditions === [] ? '' : ' WHERE ' . implode(' AND ', $this->conditions);
 
         $sql = "DELETE FROM " . $this->table . $where;
@@ -192,7 +193,7 @@ class DB
 
     public function update()
     {
-        echo "update";
+
 
         // UPDATE `books` SET `is_active` = '0' WHERE `books`.`id` = 6;
 
@@ -206,4 +207,22 @@ class DB
 
         $this->conn->prepare($sql)->execute();
     }
+
+    // public function updateAll()
+    // {
+    //     $where = " WHERE " . implode(' AND ', $this->conditions);
+
+    //     $sql="UPDATE books SET" title= 'ff', description ='e' "WHERE" `books`. $where;
+
+
+
+    //     $values = implode(', ', $this->values);
+    //     print_r($values);
+
+    //     $sql = "UPDATE " . $this->table . " SET " . $values . $where;
+    //     echo $sql;
+
+
+    //     $this->conn->prepare($sql)->execute();
+    // }
 }

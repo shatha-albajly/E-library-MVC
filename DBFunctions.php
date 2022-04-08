@@ -54,6 +54,9 @@ class DBFunctions
             foreach (self::$db->result as $cc) {
                 self::$books[$c['id']] = $cc;
             }
+            echo "<pre>";
+            var_dump(self::$books);
+            echo "</pre>";
         }
     }
 
@@ -85,18 +88,23 @@ class DBFunctions
     public static function updateProduct()
     {
         self::$db = DB::sendOutside();
-        self::$db->table('books')->column()->values('is_active=0')->where('id="' . Controller::$id . '"')->update();
-        // $statement = $this->pdo->prepare("UPDATE products SET title = :title, 
-        //                                 image = :image, 
-        //                                 description = :description, 
-        //                                 price = :price WHERE id = :id");
-        // $statement->bindValue(':title', $product->title);
-        // $statement->bindValue(':image', $product->imagePath);
-        // $statement->bindValue(':description', $product->description);
-        // $statement->bindValue(':price', $product->price);
-        // $statement->bindValue(':id', $product->id);
+        // UPDATE `books` SET `description` = 'e' WHERE `books`.`id` = 13;
+        $x = '';
+        // echo "<pre>";
+        // var_dump(Controller::$productData);
+        // echo "</pre>";
+        foreach (Controller::$productData as $key => $value) {
+            if ($key == 'imageFile') {
 
-        // $statement->execute();
+                continue;
+            } else
+                $x = $x . "`$key` = '$value'" . ',';
+        }
+        $x = substr($x, 0, -1);
+
+
+        // UPDATE books SET `id` = 15,`title` = '2',`image` = 'images/oyOoqQJT/849762.jpg',`price` = 1 ,`description` = '1',`pages_number` = '44',`category_id` = 1 , `author_id` = '0' , `publisher_id` = '0',`quantity` = '1',`format` = 'pdf',`created_by` = '0',`is_active` = '1',`created_at` = '0000-00-00 00:00:00',`updated_at` = '0000-00-00 00:00:00' WHERE id="15";
+        self::$db->table('books')->column()->values($x)->where('id="' . Controller::$id . '"')->update();
     }
 
     // create one item

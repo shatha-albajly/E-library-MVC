@@ -20,6 +20,7 @@ class Controller
     public static float $price;
     public static array $imageFile;
     public static ?string $imagePath = null;
+    public static $productData;
 
     // index controller
     public static function index()
@@ -185,10 +186,11 @@ class Controller
             $productData['title'] = $_POST['title'];
             $productData['description'] = $_POST['description'];
             $productData['price'] = $_POST['price'];
-            $productData['category-id'] = $_POST['category-id'];
+            $productData['category_id'] = $_POST['category-id'];
             $productData['quantity'] = $_POST['quantity'];
 
             $productData['imageFile'] = $_FILES['image'] ?? null;
+
             self::load($productData);
             self::save();
             header('Location: /dashboard');
@@ -212,12 +214,16 @@ class Controller
         $productData = DBFunctions::$selected;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            print_r($_POST);
             $productData['title'] = $_POST['title'];
             $productData['description'] = $_POST['description'];
             $productData['price'] = $_POST['price'];
-            $productData['category-id'] = $_POST['category-id'];
+            $productData['category_id'] = $_POST['category-id'];
             $productData['quantity'] = $_POST['quantity'];
             $productData['imageFile'] = $_FILES['image'] ?? null;
+
+
+            self::$productData = $productData;
 
 
             self::load($productData);
@@ -254,7 +260,7 @@ class Controller
         self::$id = $data['id'] ?? null;
         self::$title = $data['title'];
         self::$description = $data['description'];
-        self::$category = $data['category-id'];
+        self::$category = $data['category_id'];
         self::$quantity = $data['quantity'];
 
         self::$price = $data['price'];
@@ -288,15 +294,15 @@ class Controller
                 move_uploaded_file(self::$imageFile['tmp_name'], __DIR__ . '/../public/' .  self::$imagePath);
             }
 
-            DBFunctions::updateProduct();
+            // DBFunctions::createProduct();
 
             // $db = Database::$db;
-            // if (self::$id) {
-            //     echo "ffff";
-            //     DBFunctions::updateProduct();
-            // } else {
-            //     DBFunctions::createProduct();
-            // }
+            if (self::$id) {
+                echo "ffff";
+                DBFunctions::updateProduct();
+            } else {
+                DBFunctions::createProduct();
+            }
         }
     }
 }
