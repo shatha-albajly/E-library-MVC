@@ -10,12 +10,12 @@
         <img src="/<?php echo $product['image'] ?>" class="product-img-view">
         <?php endif; ?>
         <div class="form-group">
-            <label>Authors Image</label><br>
+            <label>Payments Image</label><br>
             <input type="file" name="image">
         </div>
 
         <div class="form-group">
-            <h4>Authors Name</h4>
+            <h4>Payments Name</h4>
             <input type="text" name="name" class="form-control"
                 value="<?php echo isset($product['name']) ? $product['name'] : ''; ?>">
         </div>

@@ -3,58 +3,58 @@
 
 namespace app\controllers;
 
-// use app\Products;
 use app\Router;
-use app\helpers\UtilHelper;
-use app\DBFunctions\DBCities;
+use app\DBFunctions\DBAuthors;
 
 
-class CitiesController
+class AuthorsController
 {
+
+
     public static ?int $id = null;
     public static string $name;
-
     public static $productData;
 
 
-    // show categiry
-    public static function showCities()
+    // show Authors
+    public static function showAuthors()
     {
+
         $keyword = $_GET['search'] ?? '';
-        DBCities::showCities($keyword);
-        Router::renderView('cities/index', [
-            'products' => DBCities::$products,
+        DBAuthors::showAuthors($keyword);
+        Router::renderView('authors/index', [
+            'products' => DBAuthors::$products,
             'keyword' => $keyword
         ]);
     }
 
-    // add category
-    public static function createCities()
+    // add Authors
+    public static function createAuthors()
     {
-        $categoryData = [];
+        $authorsData = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $categoryData['name'] = $_POST['name'];
+            $authorsData['name'] = $_POST['name'];
 
-            self::load($categoryData);
+            self::load($authorsData);
             self::save();
-            header('Location: /cities');
+            header('Location: /authors');
             exit;
         }
-        Router::renderView('cities/create', [
-            'product' => $categoryData
+        Router::renderView('authors/create', [
+            'product' => $authorsData
         ]);
     }
 
-    // update boocategory
-    public static function updateCities()
+    // update Authors
+    public static function updateAuthors()
     {
         $id = $_GET['id'] ?? null;
         if (!$id) {
-            header('Location: /cities');
+            header('Location: /authors');
             exit;
         }
-        DBCities::getCitiesById($id);
-        $productData = DBCities::$selected;
+        DBAuthors::getAuthorsById($id);
+        $productData = DBAuthors::$selected;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             print_r($_POST);
@@ -66,29 +66,29 @@ class CitiesController
 
             self::load($productData);
             self::save();
-            header('Location: /cities');
+            header('Location: /authors');
             exit;
         }
 
-        Router::renderView('cities/update', [
+        Router::renderView('authors/update', [
             'product' => $productData
         ]);
     }
 
 
-    // delete category
-    public static function deleteCities()
+    // delete Authors
+    public static function deleteAuthors()
     {
         $id = $_POST['id'] ?? null;
         if (!$id) {
-            header('Location: /cities');
+            header('Location: /authors');
             exit;
         }
-        if (DBCities::deleteCities($id)) {
-            header('Location: /cities');
+        if (DBAuthors::deleteAuthors($id)) {
+            header('Location: /authors');
             exit;
         }
-        header('Location: /cities');
+        header('Location: /authors');
         exit;
     }
 
@@ -113,10 +113,11 @@ class CitiesController
 
         if (empty($errors)) {
 
+
             if (self::$id) {
-                DBCities::updateCities();
+                DBAuthors::updateAuthors();
             } else {
-                DBCities::createCities();
+                DBAuthors::createAuthors();
             }
         }
     }

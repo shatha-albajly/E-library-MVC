@@ -6,8 +6,7 @@ namespace app\controllers;
 // use app\Products;
 use app\Router;
 use app\helpers\UtilHelper;
-use app\DBFunctions;
-
+use app\DBFunctions\DBFunctions;
 
 class Controller
 
@@ -21,6 +20,27 @@ class Controller
     public static array $imageFile;
     public static ?string $imagePath = null;
     public static $productData;
+    // add category
+    public static function createCategories()
+    {
+
+        echo "dddddddddddddddddddddddddddd";
+        $categoryData = [
+            'image' => ''
+        ];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $categoryData['name'] = $_POST['name'];
+            $categoryData['imageFile'] = $_FILES['image'] ?? null;
+
+            self::load($categoryData);
+            self::save();
+            header('Location: /categories');
+            exit;
+        }
+        Router::renderView('categories/create');
+    }
+
+
 
     // index controller
     public static function index()

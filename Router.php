@@ -46,6 +46,7 @@ class Router
             echo 'Page not found';
             exit;
         }
+        print_r($fn);
         echo call_user_func($fn);
     }
 
